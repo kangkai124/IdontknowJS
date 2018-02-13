@@ -1,0 +1,20 @@
+{
+  "name": "IdontknowJS",
+  "version": "0.0.1",
+  "description": "同学把球给我，我要回家🙃🙃",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kangkai124/IdontknowJS.git"
+  },
+  "keywords": ["javaScript"],
+  "author": "kangkai124",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kangkai124/IdontknowJS/issues"
+  },
+  "homepage": "https://github.com/kangkai124/IdontknowJS#readme"
+}
