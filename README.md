@@ -1,5 +1,5 @@
 # IdontknowJS
-萌新的JavaScript日常学习
+JavaScript日常学习
 
 ![把球给我，我要回家](./WOhyJEe3.gif)
 
