@@ -1,4 +1,7 @@
 # IdontknowJS
-同学把球给我，我要回家🙃🙃
+萌新的JavaScript日常学习
 
-1. 《JavaScript设计模式》笔记
+![把球给我，我要回家](./WOhyJEe3.gif)
+
+分类：
+1. JavaScript设计模式
