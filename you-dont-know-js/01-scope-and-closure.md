@@ -1,4 +1,4 @@
-### 作用域
+## 作用域
 
 **作用域**是一套规则，用于确定在何处以及如何查找变量（标识符）。
 
@@ -137,3 +137,137 @@ var foo = function bar () { }
 ```
 
 即使是具名的函数表达式，名称标识符在赋值之前也不能使用。
+
+
+
+## 闭包
+
+当函数可以**记住**并**访问**所在的词法作用域时，就产生了闭包（不一定是完整的闭包）。即使函数是在当前词法作用域之外执行的。
+
+```js
+function foo () {
+    var a = 2;
+    function bar () {
+        console.log(a);
+    }
+    bar();
+}
+foo();
+```
+
+函数 bar( ) 具有一个涵盖 foo ( ) 作用域的闭包，但不是完整的闭包，向下面把 bar return 出来的才算是完整的闭包。也就是**在自己定义的词法作用域外执行**。 
+
+```js
+function foo () {
+    var a = 2;
+    function bar () {
+        console.log(a);
+    }
+    return bar;
+}
+var baz = foo();
+baz();			// 2 这就是闭包
+```
+
+下面这两个也是闭包。
+
+```js
+function foo () {
+    var a = 2;
+    function baz () {
+        console.log(a);
+    }
+    bar(baz);
+}
+function bar (fn) {
+    fn();		// 这也是闭包
+}
+
+var fn;
+function foo () {
+    var a = 2;
+    function baz () {
+        console.log(a);
+    }
+    fn = baz;	// 将 baz 赋值给全局变量
+}
+function bar () {
+    fn();		// 这也是闭包
+}
+foo();
+bar();			// 2
+```
+
+在定时器、事件监听、ajax 请求、跨窗口通信、Web Workers 或者任何其他的异步任务中，只要使用了**回调函数**，实际上就是在使用闭包！
+
+### 循环和闭包
+
+来看一段代码：
+
+```js
+for (var i = 1; i <= 5; i++) {
+    setTimeout(function timer () {
+        console.log(i);
+    }, i * 1000)
+}
+```
+
+没错，结果是以每秒一次的频率输出5次6。
+
+分析一下，以上代码试图在循环中的每隔迭代都捕获一个 i 的副本，尽管循环中5个函数是在各自的迭代中分别定义的，但是它们都被封闭在一个共享的全局作用域中，因此实际上只有一个 i 。
+
+所以，我们需要再循环的每次迭代中使用一个闭包作用域。
+
+```js
+for (var i = 1; i <= 5; i++) {
+    (function () {
+        var j = i;
+        setTimeout(function timer () {
+            console.log(j);
+        }, j * 1000)
+    })()
+}
+```
+
+改进一下：
+
+```js
+for (var i = 1; i <= 5; i++) {
+    (function (j) {
+        setTimeout(function timer () {
+            console.log(j);
+        }, j * 1000)
+    })(i)
+}
+```
+
+使用 IIFE 在每次迭代的时候都创建了一个新的作用域，其实就是每次迭代只需要一个块作用域。因此，可以通过 let 实现。
+
+```js
+for (var i = 1; i <= 5; i++) {
+    let j = i;		// 块作用域
+    setTimeout(function timer () {
+        console.log(j);
+    }, j * 1000)
+}
+// var i 只声明了一次，后面是给 i 赋值
+```
+
+for 循环头部的 let 声明还会有一个特殊的行为：变量（i）在循环中每次迭代都会被声明，使用上一个迭代的结果来初始化这个变量。
+
+```js
+for (let i = 1; i <= 5; i++) {
+    setTimeout(function timer () {
+        console.log(i);
+    }, i * 1000)
+}
+/**
+ * 相当于
+ * let i = 1;
+ * let i = 2;
+ * let i = 3;
+ * let i = 4;
+ * let i = 5;
+ */
+```
+
