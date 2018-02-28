@@ -1,13 +1,6 @@
-/**
- * Object-oriented programming 12-02-2018 16:08
- */
+stage 1  多个全局变量
 
-/********************************************
- *
- * stage 1  多个全局变量
- *
- *******************************************/
-
+```js
 function output1 () {
   console.log(1)
 }
@@ -19,12 +12,11 @@ function output2 () {
 function output3 () {
   console.log(3)
 }
+```
 
-/********************************************
- *
- * stage 2  对象
- *
- *******************************************/
+stage 2  对象
+
+```js
 const OutputObject = {
   output1: function () { ... },
   output2: function () { ... },
@@ -39,13 +31,12 @@ const OutputObject = () => ({
 const a = OutputObject()
 // 每次return的对象都是新的，但是和OutputObject没有联系
 a.output1()
+```
 
-/********************************************
- *
- * stage 3  类
- *
- *******************************************/
- const OutputObject = function () {
+stage 3  类
+
+```js
+const OutputObject = function () {
    this.output1 = function () { ... }
    this.output2 = function () { ... }
    this.output3 = function () { ... }
@@ -83,10 +74,11 @@ OutputObject.prototype = {
 }
 const a = new OutputObject()
 a.output1().output2().output3()
+```
 
-/****************************
- * stage 3.1  原生对象的扩展
- ***************************/
+stage 3.1  原生对象的扩展
+
+```js
 Function.prototype.addMethod = function (name, fn) {
   // 函数式调用
   this[name] = fn
@@ -123,3 +115,6 @@ Methods.addMethod('output1', function () {
 })
 const m = new Methods()
 m.output1().output2()
+
+```
+
