@@ -21,6 +21,8 @@ LHS 和 RHS 查询都从当前作用域开始，没有的话向上级作用域�
 1. var a ，在其作用域中声明新变量，代码执行前进行。
 2. a = 2 ，LSH 查询变量 a 并对其赋值。
 
+
+
 ### 函数作用域
 
 外部作用域无法访问到函数内部的任何内容。
@@ -65,6 +67,8 @@ IIFE进阶用法，传参
 })(window);
 ```
 
+
+
 ### 块作用域
 
 let 关键字可以将变量绑定在任意的作用域中（通常是 { ... } 中）。
@@ -82,6 +86,8 @@ console.log(a);     // ReferenceError: a is not defined
 ```
 
 块作用域有用的一点和 闭包和垃圾回收机制有关（见下面）。
+
+
 
 ### 提升
 
@@ -200,6 +206,8 @@ bar();			// 2
 
 在定时器、事件监听、ajax 请求、跨窗口通信、Web Workers 或者任何其他的异步任务中，只要使用了**回调函数**，实际上就是在使用闭包！
 
+
+
 ### 循环和闭包
 
 来看一段代码：
@@ -271,3 +279,79 @@ for (let i = 1; i <= 5; i++) {
  */
 ```
 
+
+
+### 模块
+
+闭包的另一个用法就是**模块**。
+
+```js
+function Module () {
+    var a = 'cool';
+    var b = 'awesome';
+    function bar () {
+        console.log(a);
+    }
+    function foo () {
+        console.log(b);
+    }
+    return { bar, foo }
+}
+```
+
+模块总结为两点：
+
+1. 外部封闭函数，该函数必须至少被调用一次
+2. 封闭函数返回至少一个内部函数，形成闭包，且内部函数可以访问和修改私有变量
+
+模块另一个简单但是强大的用法，命名**返回的对象**。
+
+```js
+var foo = (function Module (id) {
+    function change () {
+        // 修改公共的 API
+        publicAPI.identify = identify2;
+    } 
+    function identify1 () {
+        console.log(id);
+    }
+    function identify2 () {
+        console.log(id.toUpperCase());
+    }
+    var publicAPI = {
+        change,
+        identify: identify1
+    }
+})('foo');
+foo.identify();			// 'foo'
+foo.change();			
+foo.identify();			// 'FOO'
+```
+
+将要返回的对象（publicAPI）赋值给一个变量，在模块实例内部就可以保留对 publicAPI 的引用，就可以从内部对模块实例进行修改。
+
+简单的介绍一个[模块实现](../js/concepts/模块.js)。
+
+
+
+### 词法作用域和动态作用域
+
+最后关于词法作用域和动态作用域的一点讨论：
+
+它们的主要区别是，**词法作用域**是在写代码时（或者说定义时）定义的，而**动态作用域**是在运行时确定的。词法作用域关注函数在何处声明，动态作用域关注函数从何处调用。
+
+JavaScript是词法作用域，因此下面代码输出的结果2而不是3！
+
+```js
+function foo () {
+    console.log(a);			// 2
+}
+function bar () {
+    var a = 3;
+    foo ();
+}
+var a = 2;
+bar ();
+```
+
+因为 foo 定义时，作用域是全局的。
