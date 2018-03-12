@@ -169,3 +169,54 @@ o2.getName  // 'o2'
 o2.getTime  // 'time2'
 ```
 
+
+
+## ES6对象与继承
+
+```js
+// 定义类
+class Student {
+    // 构造方法
+    constructor(name, age, subject) {
+        this.name = name;
+        this.age = age;
+        this.subject = subject;
+	}
+    
+    study() {
+        console.log(`我在学习${this.subject}`)
+    }
+}
+//实例化类
+let student = new Student('kk', 24, '前端开发');
+student.study(); //我在学习前端开发
+```
+
+上面的代码定义了一个 `Student`类， 可以看到里面有一个 `constructor`方法， 这就是构造方法，而 `this`关键字则代表实例对象。也就是说，ES5中的构造函数 `Student`， 对应的是E6中 `Student`类中的 `constructor`方法。
+
+`Student`类除了构造函数方法，还定义了一个 `study`方法。需要特别注意的是，在ES6中定义类中的方法的时候，前面不需要加上 `function`关键字，直接把函数定义进去就可以了。另外，方法之间不要用逗号分隔，加了会报错。而且，类中的方法全部是定义在原型上的，我们可以用下面的代码进行验证。
+
+```
+console.log(student3.__proto__.study === Student.prototype.study); //trueconsole.log(student3.hasOwnProperty('study')); // false
+```
+
+上面的第一行的代码中, `student3.__proto__`是指向的原型对象，其中 `Student.prototype`也是指向的原型的对象，结果为 `true`就能很好的说明上面的结论： **类中的方法全部是定义在原型上的**。第二行代码是验证 `student3`实例中是否有 `study`方法，结果为 `false`， 表明实例中没有 `study`方法，这也更好的说明了上面的结论。
+
+### 继承
+
+E6中 `class`可以通过 `extends`关键字来实现继承， 这比前面提到的ES5中使用原型链来实现继承， 要清晰和方便很多。下面我们使用ES6的语法来实现 `Pupil`。
+
+```js
+//子类
+class Pupil extends Student{
+    constructor(name, age, subject, school) {    
+        //调用父类的constructor    
+        super(name, age, subject);     
+        this.school = school;  
+    }
+}
+let pupil = new Pupil('小辉', 8, '小学义务教育课程', '北大附小');
+pupil.study(); //我在学习小学义务教育课程
+```
+
+上面代码代码中， 我们通过了 `extends`实现 `Pupil`子类继承 `Student`父类。需要特别注意的是，子类必须在 `constructor`方法中**首先调用 super方法**，否则实例化时会报错。这是因为子类没有自己的 `this`对象， 而是继承父类的 `this`对象，然后对其加工。如果不调用 `super`方法，子类就得不到 `this`对象。
