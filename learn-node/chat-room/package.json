@@ -1,0 +1,22 @@
+{
+  "name": "hey-chat",
+  "version": "0.0.1",
+  "description": "Minimalist multiroom chat server",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "chat"
+  ],
+  "author": "kangkai <kkstrive0124@gmail.com> (https://github.com/kangkai124)",
+  "license": "MIT",
+  "dependencies": {
+    "mime": "^2.2.0",
+    "socket.io": "^2.0.4"
+  }
+}
