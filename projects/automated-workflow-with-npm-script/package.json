@@ -1,8 +1,11 @@
 {
   "name": "k-script",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "port": 6066
+  },
   "scripts": {
     "lint": "npm-run-all --parallel lint:*",
     "lint:js": "eslint *.js",
@@ -15,7 +18,9 @@
     "cover": "nyc --reporter=html npm test",
     "cover:cleanup": "rm -rf coverage && rm -rf .nyc_output",
     "cover:archive": "mkdir -p coverage_archive/k-script-$npm_package_version && cp -r coverage/* coverage_archive/k-script-$npm_package_version",
-    "postcover": "npm run cover:archive && npm run cover:cleanup && opn coverage_archive/k-script-$npm_package_version/index.html"
+    "cover:server": "http-server coverage_archive/k-script-$npm_package_version -p $npm_package_config_port",
+    "cover:open": "opn http://localhost:$npm_package_config_port",
+    "postcover": "npm-run-all cover:archive cover:cleanup --parallel cover:server cover:open"
   },
   "keywords": [],
   "author": "kangkai <kkstrive0124@gmail.com> (https://github.com/kangkai124)",
@@ -23,6 +28,7 @@
   "dependencies": {
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
+    "http-server": "^0.11.1",
     "jsonlint": "^1.6.3",
     "markdownlint-cli": "^0.8.1",
     "mocha": "^5.0.5",
