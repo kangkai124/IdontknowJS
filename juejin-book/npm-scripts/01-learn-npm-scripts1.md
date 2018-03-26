@@ -82,6 +82,8 @@ npm config set init.version "0.1.0"
 
 要格外注意 `--fix` 参数前面的 `--` 分隔符，意指要给 `npm run lint:js` 实际指向的命令传递额外的参数。
 
+
+
 ## npm script 钩子
 
 *pre* 和 *post* ：
@@ -152,4 +154,134 @@ npm_package_nyc_exclude_1=.*.js
 1. *npm run cover:archive*，归档本次覆盖率报告
 2. *npm run cover:cleanup*，清理本次覆盖率报告
 3. *opn coverage_archive/$npm_package_version/index.html*，直接预览覆盖率报告
+
+
+
+
+
+## npm 命令行自动补全
+
+#### npm run | less 
+
+使用 */* 进入搜索模式
+
+#### npm completion 集成到 shell 中
+
+npm 自身提供了自动完成工具 [completion](https://link.juejin.im/?target=https%3A%2F%2Fdocs.npmjs.com%2Fcli%2Fcompletion)，将其集成到 [bash](https://link.juejin.im/?target=https%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fbash) 或者 [zsh](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Frobbyrussell%2Foh-my-zsh) 里也非常容易。
+
+官方文档里面的集成方法如下：
+
+```
+npm completion >> ~/.bashrc
+npm completion >> ~/.zshrc
+```
+
+如果你也有代码洁癖，为了保持 .zshrc 或者 .bashrc 文件的整洁，可以用下面的方法：
+
+第 1 步，把 npm completion 产生的那坨命令放在单独的文件中：
+
+```shell
+npm completion >> ~/.npm-completion.bash
+```
+
+第 2 步，在 .bashrc 或者 .zshrc 中引入这个文件：
+
+```shell
+echo "[ -f ~/.npm-completion.bash ] && source ~/.npm-completion.bash;" >> ~/.bashrc
+echo "[ -f ~/.npm-completion.bash ] && source ~/.npm-completion.bash;" >> ~/.zshrc
+```
+
+>  TIP：执行完上面的命令一定要记得 *source ~/.zshrc* 或者 *source ~/.bashrc*
+
+#### 更高级的自动补全
+
+[zsh-better-npm-completion](https://github.com/lukechilds/zsh-better-npm-completion)
+
+[yarn-completions](https://github.com/mklabs/yarn-completions)
+
+
+
+## npm script 跨平台兼容
+
+#### 文件系统操作的跨平台兼容
+
+- [rimraf](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fisaacs%2Frimraf) 或 [del-cli](https://link.juejin.im/?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fdel-cli)，用来删除文件和目录，实现类似于 `rm -rf` 的功能
+- [cpr](https://link.juejin.im/?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fcpr)，用于拷贝、复制文件和目录，实现类似于 `cp -r` 的功能
+- [make-dir-cli](https://link.juejin.im/?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fmake-dir-cli)，用于创建目录，实现类似于 `mkdir -p` 的功能
+
+```shell
+npm i rimraf cpr make-dir-cli -D
+# npm install rimraf cpr make-dir-cli --save-dev
+# yarn add rimraf cpr make-dir-cli -D
+```
+
+#### 用 cross-var 引用变量
+
+Linux 下直接可以用 `$npm_package_name`，而 Windows 下必须使用 `%npm_package_name%`，我们可以使用 [cross-var](https://link.juejin.im/?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fcross-var) 实现跨平台的变量引用:
+
+```patch
+"scripts": {
+     "cover:cleanup": "rm -rf coverage && rm -rf .nyc_output",
+-    "cover:archive": "mkdir -p coverage_archive/$npm_package_version && cp -r coverage/* coverage_archive/$npm_package_version",
+-    "cover:serve": "http-server coverage_archive/$npm_package_version -p $npm_package_config_port",
+-    "cover:open": "opn http://localhost:$npm_package_config_port",
++    "cover:archive": "cross-var \"mkdir -p coverage_archive/$npm_package_version && cp -r coverage/* coverage_archive/$npm_package_version\"",
++    "cover:serve": "cross-var http-server coverage_archive/$npm_package_version -p $npm_package_config_port",
++    "cover:open": "cross-var opn http://localhost:$npm_package_config_port",
+     "postcover": "npm-run-all cover:archive cover:cleanup --parallel cover:serve cover:open"
+   }
+```
+
+#### 用 cross-env 设置环境变量
+
+第 1 步，添加 cross-env 到开发依赖：
+
+```shell
+npm i cross-env -D
+```
+
+第 2 步，改写使用了环境变量的 npm script：
+
+```patch
+ "scripts": {
+
+- "test": "NODE_ENV=test mocha tests/",
+
++ "test": "cross-env NODE_ENV=test mocha tests/",
+  },
+
+```
+
+ 
+
+## 把庞大的 npm script 拆到单独的文件中
+
+借助 [scripty](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Ftestdouble%2Fscripty) 我们可以将 npm script 剥离到单独的文件中。
+
+```shell
+npm i scripty -D
+
+mkdir -p scripts/cover
+
+touch scripts/cover.sh
+touch scripts/cover/serve.sh
+touch scripts/cover/open.sh
+```
+
+然后创建空白的脚本文件，因为有了单独的脚本，我们可以把原来的 precover、cover、postcover、cover:archive、cover:cleanup 合并到一个文件中。
+
+按照 *scripty* 的默认约定，npm script 命令和上面各文件的对应关系如下：
+
+|命令	|文件	|备注|
+| ---- | ---- | ---- |
+|cover|	scripts/cover.sh|	内含 precover、postcover 的逻辑|
+|cover:serve|	scripts/cover/serve.sh|	启动服务|
+|cover:open|	scripts/cover/open.sh|	打开预览|
+**特别注意的是，给所有脚本增加可执行权限是必须的，否则 scripty 执行时会报错，**我们可以给所有的脚本增加可执行权限：
+
+```shell
+chmod -R a+x scripts/*/.sh
+```
+
+
 
