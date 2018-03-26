@@ -82,3 +82,74 @@ npm config set init.version "0.1.0"
 
 要格外注意 `--fix` 参数前面的 `--` 分隔符，意指要给 `npm run lint:js` 实际指向的命令传递额外的参数。
 
+## npm script 钩子
+
+*pre* 和 *post* ：
+
+举例来说，运行 npm run test 的时候，分 3 个阶段：
+
+1. 检查 scripts 对象中是否存在 pretest 命令，如果有，先执行该命令
+2. 检查是否有 test 命令，有的话运行 test 命令，没有的话报错
+3. 检查是否存在 posttest 命令，如果有，执行 posttest 命令
+
+```json
+"precover": "rm -rf coverage",
+"cover": "nyc --reporter=html npm test",
+"postcover": "rm -rf .nyc_output && opn coverage/index.html"
+```
+
+
+
+## 在 npm script 中使用变量
+
+通过运行 `npm run env` 就能拿到完整的变量列表。
+
+`npm run env | grep npm_package | sort` 拿到部分排序后的预定义环境变量：
+
+```shell
+// 作者信息...
+npm_package_author_email=wangshijun2010@gmail.com
+npm_package_author_name=wangshijun
+npm_package_author_url=http://github.com/wangshijun
+// 依赖信息...
+npm_package_devDependencies_markdownlint_cli=^0.5.0
+npm_package_devDependencies_mocha=^4.0.1
+npm_package_devDependencies_npm_run_all=^4.1.2
+// 各种 npm script
+npm_package_scripts_lint=npm-run-all --parallel lint:*
+npm_package_scripts_lint_css=stylelint *.less
+npm_package_scripts_lint_js=eslint *.js
+npm_package_scripts_lint_js_fix=npm run lint:js -- --fix
+npm_package_scripts_lint_json=jsonlint --quiet *.json
+// 基本信息
+npm_package_version=0.1.0
+npm_package_gitHead=3796e548cfe406ec33ab837ac00bcbd6ee8a38a0
+npm_package_license=MIT
+npm_package_main=index.js
+npm_package_name=hello-npm-script
+npm_package_readmeFilename=README.md
+// 依赖的配置
+npm_package_nyc_exclude_0=**/*.spec.js
+npm_package_nyc_exclude_1=.*.js
+```
+
+变量的使用方法遵循 shell 里面的语法，直接在 npm script 给想要引用的变量前面加上 *$* 符号即可。
+
+```json
+"cover": "nyc --reporter=html npm test",
+"cover:cleanup": "rm -rf coverage && rm -rf .nyc_output",
+"cover:archive": "mkdir -p coverage_archive/k-script-$npm_package_version && cp -r coverage/* coverage_archive/k-script-$npm_package_version",
+"postcover": "npm run cover:archive && npm run cover:cleanup && opn coverage_archive/k-script-$npm_package_version/index.html"
+```
+
+*cover:archive* 做了 2 件事情：
+
+1. *mkdir -p coverage_archive/$npm_package_version* 准备当前版本号的归档目录
+2. *cp -r coverage/* coverage_archive/$npm_package_version*，直接复制文件来归档
+
+而 *postcover* 做了 3 件事情：
+
+1. *npm run cover:archive*，归档本次覆盖率报告
+2. *npm run cover:cleanup*，清理本次覆盖率报告
+3. *opn coverage_archive/$npm_package_version/index.html*，直接预览覆盖率报告
+
