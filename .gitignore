@@ -1,0 +1,13 @@
+.DS_STORE
+node_modules
+
+build/
+remote-repo/
+coverage/
+flow-coverage/
+.module-cache
+*.log*
+.idea
+.vscode
+.lock
+package-lock.json
