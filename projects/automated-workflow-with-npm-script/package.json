@@ -1,6 +1,6 @@
 {
   "name": "k-script",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "main": "index.js",
   "config": {
@@ -15,26 +15,27 @@
     "lint:markdown": "markdownlint --config .markdownlint.json *.md",
     "pretest": "npm run lint",
     "test": "mocha tests/",
-    "cover": "nyc --reporter=html npm test",
-    "cover:cleanup": "rm -rf coverage && rm -rf .nyc_output",
-    "cover:archive": "mkdir -p coverage_archive/k-script-$npm_package_version && cp -r coverage/* coverage_archive/k-script-$npm_package_version",
-    "cover:server": "http-server coverage_archive/k-script-$npm_package_version -p $npm_package_config_port",
-    "cover:open": "opn http://localhost:$npm_package_config_port",
-    "postcover": "npm-run-all cover:archive cover:cleanup --parallel cover:server cover:open"
+    "cover": "scripty",
+    "cover:serve": "scripty",
+    "cover:open": "scripty"
   },
   "keywords": [],
   "author": "kangkai <kkstrive0124@gmail.com> (https://github.com/kangkai124)",
   "license": "MIT",
   "dependencies": {
     "chai": "^4.1.2",
+    "cpr": "^3.0.1",
     "eslint": "^4.19.1",
     "http-server": "^0.11.1",
     "jsonlint": "^1.6.3",
+    "make-dir-cli": "^1.0.0",
     "markdownlint-cli": "^0.8.1",
     "mocha": "^5.0.5",
     "npm-run-all": "^4.1.2",
     "nyc": "^11.6.0",
     "opn-cli": "^1.0.5",
+    "rimraf": "^2.6.2",
+    "scripty": "^1.7.2",
     "stylelint": "^9.1.3",
     "stylelint-config-standard": "^18.2.0"
   },

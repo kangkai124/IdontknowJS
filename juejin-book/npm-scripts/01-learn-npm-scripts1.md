@@ -244,12 +244,9 @@ npm i cross-env -D
 
 ```patch
  "scripts": {
-
 - "test": "NODE_ENV=test mocha tests/",
-
 + "test": "cross-env NODE_ENV=test mocha tests/",
   },
-
 ```
 
  
@@ -277,7 +274,7 @@ touch scripts/cover/open.sh
 |cover|	scripts/cover.sh|	内含 precover、postcover 的逻辑|
 |cover:serve|	scripts/cover/serve.sh|	启动服务|
 |cover:open|	scripts/cover/open.sh|	打开预览|
-**特别注意的是，给所有脚本增加可执行权限是必须的，否则 scripty 执行时会报错，**我们可以给所有的脚本增加可执行权限：
+**特别注意的是，给所有脚本增加可执行权限是必须的，否则 scripty 执行时会报错，** 我们可以给所有的脚本增加可执行权限：
 
 ```shell
 chmod -R a+x scripts/*/.sh
