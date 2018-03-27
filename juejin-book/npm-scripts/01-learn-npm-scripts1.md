@@ -280,5 +280,17 @@ touch scripts/cover/open.sh
 chmod -R a+x scripts/*/.sh
 ```
 
+脚本内容在[这里](../../projects/automated-workflow-with-npm-script/scripts)。
 
+
+
+## NodeJs 脚本代替复杂的 npm script
+
+Node.js 本身是跨平台的，用它编写的脚本出现跨平台兼容问题的概率很小。
+
+需要用到 [shelljs](https://link.juejin.im/?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fshelljs) 、 [chalk](https://link.juejin.im/?target=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fchalk) 。
+
+```shell
+"cover": "node scripts/cover.js"
+```
 

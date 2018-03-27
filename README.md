@@ -19,3 +19,6 @@ JavaScript日常学习
 
 ### 你不知道的JavaScript
 [作用域和闭包](./you-dont-know-js/01-scope-and-closure.md)
+
+### 掘金小册笔记
+[npm script 学习](./juejin-book/npm-scripts/01-learn-npm-scripts1.md)
