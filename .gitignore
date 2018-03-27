@@ -11,3 +11,5 @@ flow-coverage/
 .vscode
 .lock
 package-lock.json
+coverage/
+.nyc_output
