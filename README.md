@@ -22,3 +22,6 @@ JavaScript日常学习
 
 ### 掘金小册笔记
 [npm script 学习](./juejin-book/npm-scripts/01-learn-npm-scripts1.md)
+
+### Projects
+[automated-workflow-with-npm-script](https://github.com/kangkai124/IdontknowJS/tree/master/projects/automated-workflow-with-npm-script)

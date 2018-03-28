@@ -294,3 +294,5 @@ Node.js 本身是跨平台的，用它编写的脚本出现跨平台兼容问题
 "cover": "node scripts/cover.js"
 ```
 
+
+
