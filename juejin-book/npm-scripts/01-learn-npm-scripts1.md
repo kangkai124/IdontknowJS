@@ -1,3 +1,5 @@
+> 代码在[这里](../../projects/automated-workflow-with-npm-script)。
+
 ## npm script 命令
 
 *npm init -y* 或者 *npm init -f* 跳过参数问答，快速生成 package.json。
@@ -296,3 +298,62 @@ Node.js 本身是跨平台的，用它编写的脚本出现跨平台兼容问题
 
 
 
+## livereload 自动刷新
+
+安装 livereload http-server 到 dev 依赖。
+
+```patch
++    "client": "npm-run-all --parallel client:*",
++    "client:reload-server": "livereload client/",
++    "client:static-server": "http-server client/"
+```
+
+在 html 中嵌入 livereload 脚本：
+
+```patch
+<body>
+   <h2>LiveReload Demo</h2>
++  <script>
++    document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
++      ':35729/livereload.js?snipver=1"></' + 'script>')
++  </script>
+ </body>
+```
+
+
+
+## git hooks 运行 npm script
+
+安装 [husky](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Ftypicode%2Fhusky)  [lint-staged](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fokonet%2Flint-staged) 到项目 dev 依赖。
+
+lint-staged ，每个团队成员提交的时候，只检查当次改动的文件。
+
+```patch
+"scripts": {
+-    "precommit": "npm run lint",
++    "precommit": "lint-staged",
+     "prepush": "npm run test",
+     "lint": "npm-run-all --parallel lint:*",
+   },
++  "lint-staged": {
++    "*.js": "eslint",
++    "*.less": "stylelint",
++    "*.css": "stylelint",
++    "*.json": "jsonlint --quiet",
++    "*.md": "markdownlint --config .markdownlint.json"
++  },
+```
+
+
+
+## npm script 实现构建流水线
+
+在现代前端项目的交付工作流中，部署前最关键的环节就是构建，构建环节要完成的事情通常包括：
+
+- 源代码预编译：比如 less、sass、typescript
+- 图片优化、雪碧图生成
+- JS、CSS 合并、压缩
+- 静态资源加版本号和引用替换
+- 静态资源传 CDN 等
+
+代码在[这里](../../projects/build-pipeline)。
