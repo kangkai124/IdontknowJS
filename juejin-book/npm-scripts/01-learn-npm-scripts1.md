@@ -163,7 +163,7 @@ npm_package_nyc_exclude_1=.*.js
 
 ## npm 命令行自动补全
 
-#### npm run | less 
+#### npm run | less
 
 使用 */* 进入搜索模式
 
@@ -251,7 +251,7 @@ npm i cross-env -D
   },
 ```
 
- 
+
 
 ## 把庞大的 npm script 拆到单独的文件中
 
@@ -276,6 +276,7 @@ touch scripts/cover/open.sh
 |cover|	scripts/cover.sh|	内含 precover、postcover 的逻辑|
 |cover:serve|	scripts/cover/serve.sh|	启动服务|
 |cover:open|	scripts/cover/open.sh|	打开预览|
+
 **特别注意的是，给所有脚本增加可执行权限是必须的，否则 scripty 执行时会报错，** 我们可以给所有的脚本增加可执行权限：
 
 ```shell
