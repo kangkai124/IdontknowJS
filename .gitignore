@@ -13,3 +13,4 @@ flow-coverage/
 package-lock.json
 coverage/
 .nyc_output
+dist/
