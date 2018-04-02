@@ -241,3 +241,58 @@ modules: [path.resolve(__dirname, "src"), "node_modules"]
 
 ## 使用 plugin
 
+更多的插件可以在这里查找：[plugins in awesome-webpack](https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fwebpack-contrib%2Fawesome-webpack%23webpack-plugins)。
+
+### DefinePlugin
+
+`DefinePlugin` 允许创建一个在**编译**时可以配置的全局常量，社区中使用最多的方式是定义环境变量，例如 `PRODUCTION = true` 或者 `__DEV__ = true` 等。
+
+```js
+module.exports = {
+  // ...
+  plugins: [
+      new webpack.DefinePlugin({
+          'process.env': {
+              "NODE_ENV": JSON.stringify("production")
+          }，
+          '__IWIND_API__': JSON.stringify("http://10.1.20.37:8080/iwind/api/v1/"),
+          'VERSION': JSON.stringify('5fa3b9')
+      }),
+  ]
+}
+```
+
+> 注意，因为这个插件直接执行文本替换，给定的值必须包含字符串本身内的**实际引号**。通常，有两种方式来达到这个效果，使用 `'"production"'`, 或者使用 `JSON.stringify('production')`。
+
+### copy-webpack-plugin
+
+### extract-text-webpack-plugin
+
+### ProvidePlugin
+
+自动加载模块，而不必到处 `import` 或 `require` 。
+
+要自动加载 `jquery`，我们可以将两个变量都指向对应的 node 模块：
+
+```
+new webpack.ProvidePlugin({
+  $: 'jquery',
+  jQuery: 'jquery'
+})
+```
+
+然后在我们任意源码中：
+
+```
+// in a module
+$('#item'); // <= 起作用
+jQuery('#item'); // <= 起作用
+// $ 自动被设置为 "jquery" 输出的内容
+```
+
+> 对于 ES2015 模块的 default export，必须指定模块的 default 属性。
+
+
+
+## 更好地使用 webpack-dev-server
+
