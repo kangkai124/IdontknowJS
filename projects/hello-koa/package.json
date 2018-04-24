@@ -4,17 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon -w example --exec \"babel-node example --presets env\"",
+    "build": "rimraf dist && babel example -s -D -d dist --presets env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "kangkai <kkstrive0124@gmail.com> (https://github.com/kangkai124)",
   "license": "MIT",
   "dependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-runtime": "^6.26.0",
+    "co": "^4.6.0",
     "ejs": "^2.5.8",
     "koa": "^2.5.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^4.0.2",
-    "koa-views": "^6.1.4"
+    "koa-views": "^6.1.4",
+    "node-fetch": "^2.1.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "nodemon": "^1.17.3",
+    "rimraf": "^2.6.2"
   }
 }

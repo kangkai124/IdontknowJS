@@ -2,7 +2,7 @@ const Koa = require('koa');
 const views = require('koa-views');
 const KoaRouter = require('koa-router');
 const bodyParser = require('koa-bodyparser');
-const static = require('koa-static');
+const Koastatic = require('koa-static');
 
 const app = new Koa();
 const router = KoaRouter();
