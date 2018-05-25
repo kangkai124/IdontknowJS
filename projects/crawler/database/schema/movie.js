@@ -1,10 +1,14 @@
 const mongoose = require('mongoose')
-const Mixed = mongoose.Schema.Types.Mixed
+const { Mixed, ObjectId } = mongoose.Schema.Types
 
 const movieSchema = new mongoose.Schema({
   doubanId: {
     type: String,
     required: true
+  },
+  category: {
+    type: ObjectId,
+    ref: 'Category'
   },
   rate: Number,
   title: String,

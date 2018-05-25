@@ -52,7 +52,7 @@ userSchema.pre('save', next => {
 })
 
 userSchema.pre('save', next => {
-  if (this.isModified('password')) return next()
+  if (!this.isModified('password')) return next()
 
   bcrypt.genSalt(SALT_WORK_FACTOR, (err, salt) => {
     if (err) return next(err)
@@ -77,7 +77,7 @@ userSchema.methods = {
       })
     })
   },
-  incLoginAttempts: user => {
+  incLoginAttempts: (user) => {
     return new Promise((resolve, reject) => {
       if (this.lockUntil && this.lockUntil < Date.now()) {
         this.update({
@@ -112,4 +112,4 @@ userSchema.methods = {
   }
 }
 
-mongoose.model('Movie', userSchema)
+mongoose.model('User', userSchema)
