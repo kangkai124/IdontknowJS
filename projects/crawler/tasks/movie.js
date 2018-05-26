@@ -5,7 +5,7 @@ const Movie = mongoose.model('Movie')
 
 
 ;(async () => {
-  const script = resolve(__dirname, '../app')
+  const script = resolve(__dirname, '../server/crawler/list')
   const child = cp.fork(script, [])
   let invoked = false
 

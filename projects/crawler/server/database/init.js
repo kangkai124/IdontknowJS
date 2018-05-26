@@ -12,13 +12,14 @@ exports.initSchemas = () => {
 exports.connect = () => {
   let maxConnectTimes = 0
 
-  const handleDisconnect = () => {
+  const handleDisconnect = (reject, err) => {
     maxConnectTimes++
 
     if (maxConnectTimes < 5) {
       mongoose.connect(db)
     } else {
-      throw new Error('database down...')
+      if (err) reject(err)
+      else throw new Error('database down...')
     } 
   }
 
@@ -30,11 +31,11 @@ exports.connect = () => {
     mongoose.connect(db)
   
     mongoose.connection.on('disconnected', () => {
-      handleDisconnect()
+      handleDisconnect(reject)
     })
   
     mongoose.connection.on('error', err => {
-      handleDisconnect()
+      handleDisconnect(reject, err)
     })
 
     mongoose.connection.once('open', () => {

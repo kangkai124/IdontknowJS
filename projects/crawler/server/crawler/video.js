@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer')
 const base = 'https://movie.douban.com/subject/'
 const doubanId = '4920389'
 
-const videoBase = 'https://movie.douban.com/trailer/229131/#content'
+// const videoBase = 'https://movie.douban.com/trailer/229131/#content'
 
 const sleep = time => new Promise(resolve => {
   setTimeout(resolve, time)

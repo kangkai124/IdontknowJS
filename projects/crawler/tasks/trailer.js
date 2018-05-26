@@ -2,30 +2,30 @@ const cp = require('child_process')
 const { resolve } = require('path')
 
   ; (async () => {
-    const script = resolve(__dirname, '../video')
-    const child = cp.fork(script, [])
-    let invoked = false
+  const script = resolve(__dirname, '../server/crawler/video')
+  const child = cp.fork(script, [])
+  let invoked = false
 
-    child.on('error', err => {
-      if (invoked) return
+  child.on('error', err => {
+    if (invoked) return
 
-      invoked = true
+    invoked = true
 
-      console.log(err)
-    })
+    console.log(err)
+  })
 
-    child.on('exit', code => {
-      if (invoked) return
+  child.on('exit', code => {
+    if (invoked) return
 
-      invoked = false
+    invoked = false
 
-      let err = code === 0 ? null : new Error('exit code' + code)
+    let err = code === 0 ? null : new Error('exit code' + code)
 
-      console.log(err)
-    })
+    console.log(err)
+  })
 
-    child.on('message', data => {
-      console.log('movies are belows \n', data)
-    })
+  child.on('message', data => {
+    console.log('movies are belows \n', data)
+  })
 
-  })()
+})()
