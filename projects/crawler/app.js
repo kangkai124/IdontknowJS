@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer')
 
-const url = 'https://movie.douban.com/explore#!type=movie&tag=%E7%83%AD%E9%97%A8&sort=recommend&page_limit=20&page_start=0'
+const url = 'https://movie.douban.com/explore#!type=movie&tag=%E8%B1%86%E7%93%A3%E9%AB%98%E5%88%86&sort=rank&page_limit=20&page_start=0'
 
 const sleep = time => new Promise(resolve => {
   setTimeout(resolve, time)
@@ -32,7 +32,7 @@ const sleep = time => new Promise(resolve => {
 
   const result = await page.evaluate(() => {
     var $ = window.$
-    var items = $('.list-wp a')
+    var items = $('.list-wp .list a')
     var links = []
 
     if (items.length >= 1) {

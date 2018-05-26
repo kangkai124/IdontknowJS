@@ -6,10 +6,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  category: {
+  category: [{
     type: ObjectId,
     ref: 'Category'
-  },
+  }],
   rate: Number,
   title: String,
   summary: String,
@@ -36,7 +36,7 @@ const movieSchema = new mongoose.Schema({
   }
 })
 
-movieSchema.pre('save', next => {
+movieSchema.pre('save', function (next) {
   if (this.isNew) {
     this.meta.createAt = this.meta.updateAt = Date.now()
   } else {
