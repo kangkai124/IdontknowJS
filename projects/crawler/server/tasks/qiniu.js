@@ -1,6 +1,6 @@
 const qiniu = require('qiniu')
 const nanoid = require('nanoid')
-const config = require('../server/config')
+const config = require('../config')
 
 const bucket = config.qiniu.bucket
 const mac = new qiniu.auth.digest.Mac(config.qiniu.AK, config.qiniu.SK)

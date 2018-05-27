@@ -76,7 +76,7 @@ userSchema.methods = {
       })
     })
   },
-  incLoginAttempts: (user) => {
+  incLoginAttempts: () => {
     return new Promise((resolve, reject) => {
       if (this.lockUntil && this.lockUntil < Date.now()) {
         this.update({
