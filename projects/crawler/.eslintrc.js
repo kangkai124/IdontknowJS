@@ -11,6 +11,7 @@ module.exports = {
     "globals": {
         "window": false,
     },
+    "parser": "babel-eslint",
     "rules": {
         "indent": [
             "error",

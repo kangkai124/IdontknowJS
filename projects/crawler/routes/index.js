@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const router = new Router()
 // const router = new Router({ prefix: '/movies' })
 
+// @controller('/api/v1/movies')
+
 router.get('/', async (ctx, next) => {
   ctx.body = 'hello koa'
   next()
