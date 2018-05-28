@@ -8,4 +8,4 @@ const router = app => {
   router.init()
 }
 
-export default router
+export { router }

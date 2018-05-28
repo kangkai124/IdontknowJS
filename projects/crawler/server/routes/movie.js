@@ -4,6 +4,8 @@ import {
   findOneMovie,
   findRelativeMovies } from '../service/movie'
 
+  
+
 // const router = new Router({ prefix: '/movies' })
 
 @controller('/api/v1/movies')

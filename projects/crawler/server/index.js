@@ -22,9 +22,6 @@ const useMiddlewares = app => {
   
   initSchemas()
   
-  // require('./tasks/movie')
-  // require('./tasks/api')
-  
   const app = new Koa()
 
   await useMiddlewares(app)

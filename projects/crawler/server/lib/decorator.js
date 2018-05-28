@@ -4,8 +4,9 @@ import { resolve } from 'path'
 import _ from 'lodash'
 
 const symbolPrefix = Symbol('prefix')
-let routerMap = new Map()
+// TODO: [c]  not [...c]
 const isArray = c => _.isArray(c) ? c : [c]
+let routerMap = new Map()
 
 export class Route {
   constructor (app, apiPath) {
@@ -15,9 +16,11 @@ export class Route {
   }
 
   init () {
-    glob.sync(resolve(this.apiPath, '**/*.js').forEach(require)) 
+    glob.sync(resolve(this.apiPath, './**/*.js')).forEach(require) 
 
+    // TODO: what is controller?
     for (let [conf, controller] of routerMap) {
+      // console.log(conf, controller, routerMap)
       const controllers = isArray(controller)
       let prefixPath = conf.target[symbolPrefix]
       if (prefixPath) prefixPath = normalizePath(prefixPath)
@@ -34,8 +37,14 @@ const normalizePath = path => path.startsWith('/') ? path : `/${path}`
 
 const router = conf => (target, key) => {
   conf.path = normalizePath(conf.path)
+  const { path, method } = conf
 
-  routerMap.set({ target, ...conf }, target[key])
+  routerMap.set({ target, path, method }, target[key])
+  // console.log(routerMap)
+  
+  // TODO: 1. why can not use ...conf
+  //       2. console.log not print
+  // routerMap.set({ target, ...conf }, target[key])
 }
 
 export const controller = path => target => (target.prototype[symbolPrefix] = path)
