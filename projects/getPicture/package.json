@@ -1,0 +1,18 @@
+{
+  "name": "getPicture",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "kangkai <kkstrive0124@gmail.com> (https://github.com/kangkai124)",
+  "license": "MIT",
+  "dependencies": {
+    "download": "^7.0.0",
+    "downloadjs": "^1.4.7",
+    "puppeteer": "^1.5.0",
+    "readline-sync": "^1.4.9"
+  }
+}
