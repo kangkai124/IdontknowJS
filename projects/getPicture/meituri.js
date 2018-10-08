@@ -77,7 +77,15 @@
     }
 });
 
+var imgs = []
+
 $('#list .selected img').each((index, item) => {
   const src = item.src
-	download(src)
+	imgs.push(src)
+})
+
+console.log(imgs)
+
+imgs.forEach(k => {
+  download(k)
 })
